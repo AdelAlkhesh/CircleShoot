@@ -36,9 +36,9 @@ The list of nice to have backlog features will include:<br>
 
 <br>
 <h3>zombie.js</h3>
--followPlayer()
--die()
--spawn()
+-followPlayer()<br>
+-die()<br>
+-spawn()<br>
 
 
 <br> 
