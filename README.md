@@ -52,17 +52,21 @@ The list of nice to have backlog features will include:<br>
 <h2>Tasks</h2>
 -Choose game assets<br> 
 -draw the DOM and canvas<br> 
--program player basic movementv 
+-program player basic movement<br> 
 -program zombie spawn<br>
 -program zombie followPlayer mechanic<br> 
 -program player shoot mechanic<br> 
 -program zombie death<br>
+-program winning condition<br>
+-add music and sound effects<br> 
+
+-audio off/on button <br>
 -program player rotation based on mouse movement<br>
 -program more complex player movement directions<br> 
 -program player health<br> 
 -program score functionality<br> 
 -program level difficulty<br>
--add music and sound effects<br> 
+
 -program item pick ups or any addional features<br> 
 
 <br>
