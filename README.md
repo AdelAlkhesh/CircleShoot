@@ -2,6 +2,9 @@
 A simple zombie horde shooting game 
 
 
+<a href="https://gunz-bunz-zombie-nunz.netlify.app/"> Demo the game</a>
+
+
 <h2> Description </h2> 
 The main game loop consists of the player running around the canvas, avoiding collision with the zombies that chase them. The player will also have to shoot the randomly spawning zombies to kill them and complete the level. 
 
