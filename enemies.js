@@ -1,10 +1,11 @@
 class Enemy {
-  constructor(x, y, radius, color, velocity) {
+  constructor(x, y, radius, color, velocity, angle) {
     this.x = x;
     this.y = y;
     this.radius = radius;
     this.color = color;
     this.velocity = velocity;
+    this.angle = angle
     
   }
 
@@ -20,5 +21,10 @@ class Enemy {
     this.drawEnemy();
     this.x = this.x + this.velocity.x;
     this.y = this.y + this.velocity.y;
+    this.angle = Math.atan2(player.y - this.y, player.x - this.x);
+    this.velocity = {
+      x: Math.cos(this.angle) * difficulty,
+      y: Math.sin(this.angle) * difficulty
+    }
   }
 }
