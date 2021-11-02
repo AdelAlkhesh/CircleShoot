@@ -39,7 +39,9 @@ function spawnEnemies() {
     };
 
     enemies.push(new Enemy(x, y, radius, color, velocity));
-  }, 1000);
+    
+  }, 600);
+
 }
 
 function drawScore() {
@@ -65,19 +67,19 @@ function drawDifficulty() {
 
 
 function increaseDifficulty() {
-  if (player.score > 500 && player.score < 1000) {
+  if (player.score > 500 && player.score < 1000 && difficulty < 2.5) {
     difficulty += 0.5
   }
-  if (player.score > 1000 && player.score < 1500) {
+  if (player.score > 1000 && player.score < 1500 && difficulty < 3 ) {
     difficulty += 0.5
   }
-  if (player.score > 1500 && player.score < 2500) {
+  if (player.score > 1500 && player.score < 2500 && difficulty < 4) {
     difficulty++
   }
-  if (player.score > 2500 && player.score < 3000) {
+  if (player.score > 2500 && player.score < 3000 && difficulty < 5) {
     difficulty++
   }
-  if (player.score > 3000 && player.score < 5000) {
+  if (player.score > 3000 && player.score < 5000 && difficulty < 7) {
     difficulty+= 2 
   }
 }
@@ -104,6 +106,7 @@ function animate() {
   drawScore();
   drawLives();
   drawDifficulty();
+  increaseDifficulty();
   projectiles.forEach((ele) => {
     ele.update();
   });
@@ -126,7 +129,7 @@ function animate() {
         setTimeout(() => {
           enemies.splice(index, 1);
           projectiles.splice(proIndex, 1);
-          player.score += 100;
+          player.score += 10;
         }, 0);
       }
     });
