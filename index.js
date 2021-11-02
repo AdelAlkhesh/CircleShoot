@@ -34,7 +34,7 @@ function spawnEnemies() {
       x = Math.random() < 0.5 ? 0 - radius : canvas.width + radius;
       y = Math.random() * canvas.height;
     } else {
-      y = x = Math.random() < 0.5 ? 0 - radius : canvas.height + radius;
+      y = Math.random() < 0.5 ? 0 - radius : canvas.height + radius;
       x = Math.random() * canvas.width;
     }
     let color1 = Math.random() * 360;
@@ -117,11 +117,10 @@ function animate() {
 
   particles.forEach((particle, index) => {
     if (particle.alpha <= 0) {
-      particles.splice(index, 1)
+      particles.splice(index, 1);
     } else {
       particle.update();
     }
-    
   });
   enemies.forEach((enemy, index) => {
     enemy.update();
