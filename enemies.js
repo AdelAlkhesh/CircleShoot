@@ -5,6 +5,7 @@ class Enemy {
     this.radius = radius;
     this.color = color;
     this.velocity = velocity;
+    
   }
 
   drawEnemy() {
