@@ -3,5 +3,7 @@ body{
 }
 
 canvas { 
-    background-color: black;
+    
+    cursor: url('https://findicons.com/files/icons/1156/fugue/16/target.png'), auto;
 }
+

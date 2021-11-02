@@ -95,7 +95,8 @@ function playerMovement() {
 let animationID;
 function animate() {
   animationID = requestAnimationFrame(animate);
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = 'rgba(0,0,0,0.3'
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
   player.drawPlayer();
   drawScore();
   drawLives();
@@ -169,6 +170,7 @@ function shootProjectile() {
 addEventListener("mousedown", (event) => {
   mouse = true;
   shootProjectile();
+  console.log(projectiles);
 });
 
 addEventListener("mouseup", (event) => {
