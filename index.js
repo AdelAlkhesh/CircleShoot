@@ -39,17 +39,14 @@ function spawnEnemies() {
     };
 
     enemies.push(new Enemy(x, y, radius, color, velocity));
-    
   }, 600);
-
 }
 
 function drawScore() {
-  ctx.fillStyle = 'white';
+  ctx.fillStyle = "white";
   ctx.font = "30px Ariel";
-  ctx.fillText(`Score: ${player.score}`, 10, 30)
+  ctx.fillText(`Score: ${player.score}`, 10, 30);
 }
-
 
 function drawLives() {
   ctx.fillStyle = "white";
@@ -57,30 +54,27 @@ function drawLives() {
   ctx.fillText(`Lives : ${player.lives}`, 10, 70);
 }
 
-
 function drawDifficulty() {
   ctx.fillStyle = "white";
   ctx.font = "30px Ariel";
   ctx.fillText(`Difficulty : ${difficulty}`, 10, 110);
 }
 
-
-
 function increaseDifficulty() {
   if (player.score > 500 && player.score < 1000 && difficulty < 2.5) {
-    difficulty += 0.5
+    difficulty += 0.5;
   }
-  if (player.score > 1000 && player.score < 1500 && difficulty < 3 ) {
-    difficulty += 0.5
+  if (player.score > 1000 && player.score < 1500 && difficulty < 3) {
+    difficulty += 0.5;
   }
   if (player.score > 1500 && player.score < 2500 && difficulty < 4) {
-    difficulty++
+    difficulty++;
   }
   if (player.score > 2500 && player.score < 3000 && difficulty < 5) {
-    difficulty++
+    difficulty++;
   }
   if (player.score > 3000 && player.score < 5000 && difficulty < 7) {
-    difficulty+= 2 
+    difficulty += 2;
   }
 }
 
@@ -91,10 +85,10 @@ function playerMovement() {
   if (isLeft && player.x - player.radius > 0) {
     player.x -= player.velocity;
   }
-  if (isUp && player.y - player.radius  > 0) {
+  if (isUp && player.y - player.radius > 0) {
     player.y -= player.velocity;
   }
-  if (isDown && player.y + player.radius  < canvas.height) {
+  if (isDown && player.y + player.radius < canvas.height) {
     player.y += player.velocity;
   }
 }
@@ -134,6 +128,28 @@ function animate() {
       }
     });
   });
+  projectiles.forEach((ele, proIndex) => {
+    if (ele.x + ele.radius > canvas.width) {
+      setTimeout(() => {
+        projectiles.splice(proIndex, 1);
+      });
+    }
+    if (ele.x - ele.radius < 0) {
+      setTimeout(() => {
+        projectiles.splice(proIndex, 1);
+      });
+    }
+    if (ele.y + ele.radius > canvas.height) {
+      setTimeout(() => {
+        projectiles.splice(proIndex, 1);
+      });
+    }
+    if (ele.y - ele.radius < 0) {
+      setTimeout(() => {
+        projectiles.splice(proIndex, 1);
+      });
+    }
+  });
 }
 let mouse = false;
 function shootProjectile() {
@@ -146,7 +162,6 @@ function shootProjectile() {
       x: Math.cos(angle) * 10,
       y: Math.sin(angle) * 10,
     };
-
     projectiles.push(new Projectile(player.x, player.y, 5, "red", velocity));
   }
 }
