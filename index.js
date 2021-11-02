@@ -23,9 +23,13 @@ const particles = [];
 
 function spawnEnemies() {
   setInterval(() => {
+    let health = 0;
     let radius = Math.floor(Math.random() * 40);
     if (radius < 10) {
       radius += 10;
+    }
+    if (radius > 30) {
+      health = 1;
     }
     let x;
     let y;
@@ -45,7 +49,7 @@ function spawnEnemies() {
       y: Math.sin(angle) * difficulty,
     };
 
-    enemies.push(new Enemy(x, y, radius, color, velocity));
+    enemies.push(new Enemy(x, y, radius, color, velocity, health));
   }, 600);
 }
 
@@ -135,7 +139,7 @@ function animate() {
     }
     projectiles.forEach((projectile, proIndex) => {
       const dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y);
-      if (dist - enemy.radius - projectile.radius < 1) {
+      if (dist - enemy.radius - projectile.radius < 1 && enemy.health == 0) {
         for (let i = 0; i < 8; i++) {
           particles.push(
             new Particle(projectile.x, projectile.y, 3, enemy.color, {
@@ -149,6 +153,20 @@ function animate() {
           projectiles.splice(proIndex, 1);
           player.score += 10;
         }, 0);
+      } else if (
+        dist - enemy.radius - projectile.radius < 1 &&
+        enemy.health > 0
+      ) {
+        enemy.health -= 1;
+        projectiles.splice(proIndex, 1);
+        for (let i = 0; i < 8; i++) {
+          particles.push(
+            new Particle(projectile.x, projectile.y, 3, enemy.color, {
+              x: Math.random() - 0.5,
+              y: Math.random() - 0.5,
+            })
+          );
+        }
       }
     });
   });
