@@ -8,19 +8,25 @@ let isDown = false;
 
 let difficulty = 2;
 
+letbackgroundColor = `hsl(${Math.random() * 360}, 50%, 50%)`;
+
 canvas.height = innerHeight;
 canvas.width = innerWidth;
 
 const x = canvas.width / 2;
 const y = canvas.height / 2;
-const player = new Player(x, y, 30, "blue");
+const player = new Player(x, y, 15, "white");
 
 const projectiles = [];
 const enemies = [];
+const particles = [];
 
 function spawnEnemies() {
   setInterval(() => {
-    const radius = 30;
+    let radius = Math.floor(Math.random() * 40);
+    if (radius < 10) {
+      radius += 10;
+    }
     let x;
     let y;
 
@@ -31,7 +37,8 @@ function spawnEnemies() {
       y = x = Math.random() < 0.5 ? 0 - radius : canvas.height + radius;
       x = Math.random() * canvas.width;
     }
-    const color = "green";
+    let color1 = Math.random() * 360;
+    const color = `hsl(${color1}, 50%, 50%`;
     const angle = Math.atan2(player.y - y, player.x - x);
     let velocity = {
       x: Math.cos(angle) * difficulty,
@@ -95,18 +102,27 @@ function playerMovement() {
 let animationID;
 function animate() {
   animationID = requestAnimationFrame(animate);
-  ctx.fillStyle = 'rgba(0,0,0,0.3'
+  ctx.fillStyle = "rgba(0,0,0,0.3";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   player.drawPlayer();
   drawScore();
   drawLives();
   drawDifficulty();
   increaseDifficulty();
+  playerMovement();
+
   projectiles.forEach((ele) => {
     ele.update();
   });
-  // spawnEnemies()
-  playerMovement();
+
+  particles.forEach((particle, index) => {
+    if (particle.alpha <= 0) {
+      particles.splice(index, 1)
+    } else {
+      particle.update();
+    }
+    
+  });
   enemies.forEach((enemy, index) => {
     enemy.update();
     const dist = Math.hypot(player.x - enemy.x, player.y - enemy.y);
@@ -118,9 +134,17 @@ function animate() {
         enemies.splice(index, 1);
       }, 0);
     }
-    projectiles.forEach((ele, proIndex) => {
-      const dist = Math.hypot(ele.x - enemy.x, ele.y - enemy.y);
-      if (dist - enemy.radius - ele.radius < 1) {
+    projectiles.forEach((projectile, proIndex) => {
+      const dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y);
+      if (dist - enemy.radius - projectile.radius < 1) {
+        for (let i = 0; i < 8; i++) {
+          particles.push(
+            new Particle(projectile.x, projectile.y, 3, enemy.color, {
+              x: Math.random() - 0.5,
+              y: Math.random() - 0.5,
+            })
+          );
+        }
         setTimeout(() => {
           enemies.splice(index, 1);
           projectiles.splice(proIndex, 1);
