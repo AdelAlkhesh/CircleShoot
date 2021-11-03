@@ -2,7 +2,7 @@
 A simple zombie horde shooting game 
 
 
-<a href="https://gunz-bunz-zombie-nunz.netlify.app/"> Demo the game</a>
+<a href=> Demo the game</a>
 
 
 <h2> Description </h2> 
