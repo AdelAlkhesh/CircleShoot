@@ -7,6 +7,7 @@ class Player {
     this.velocity = 3;
     this.lives = 3
     this.score = 0;
+    this.hasPowerUp = false;
   }
 
   drawPlayer() {
