@@ -6,6 +6,8 @@ let isRight = false;
 let isUp = false;
 let isDown = false;
 
+let proRadius = 5;
+
 let audio = new Audio("./audio/Sub - Mini Impact-[AudioTrimmer.com] (1).wav");
 let backgroundAudio = new Audio("./audio/Sweet baby kicks PSG.mp3");
 
@@ -28,7 +30,9 @@ const projectiles = [];
 const enemies = [];
 const particles = [];
 const powerUps = [];
-const randomDrops = ["health", "speed"];
+const randomDrops = ['cannon', 'speed', 'health'];
+let powerUpDropped = false;
+
 
 function spawnEnemies() {
   setInterval(() => {
@@ -157,13 +161,15 @@ function animate() {
       const dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y);
       if (dist - enemy.radius - projectile.radius < 1 && enemy.health == 0) {
         let chance = Math.round(Math.random() * 50);
-        if (chance == 1 && player.hasPowerUp == false) {
+        if (chance == 1 && player.hasPowerUp == false && powerUpDropped == false) {
+          powerUpDropped = true;
           powerUps.push(
             new RandomDrops(
               projectile.x,
               projectile.y,
               15,
               randomDrops[Math.floor(Math.random() * randomDrops.length)]
+              
             )
           );
         }
@@ -245,6 +251,24 @@ function animate() {
           player.velocity = 3;
           timer = 0;
           player.hasPowerUp = false;
+          powerUpDropped = false;
+        }
+      }, 1000);
+    } else if (
+      powerUpDist - drop.radius - player.radius < 1 &&
+      drop.name == "cannon"
+    ) {
+      player.hasPowerUp = true;
+      proRadius = 30;
+      powerUps.splice(index, 1);
+      cannonID = setInterval(() => {
+        timer++;
+        if (timer == 20) {
+          clearInterval(cannonID);
+          proRadius = 5;
+          timer = 0;
+          player.hasPowerUp = false;
+          powerUpDropped = false;
         }
       }, 1000);
     }
@@ -259,7 +283,9 @@ function shootProjectile() {
     x: Math.cos(angle) * 10,
     y: Math.sin(angle) * 10,
   };
-  projectiles.push(new Projectile(player.x, player.y, 5, "red", velocity));
+  projectiles.push(
+    new Projectile(player.x, player.y, proRadius, "red", velocity)
+  );
 }
 
 addEventListener("click", (event) => {
