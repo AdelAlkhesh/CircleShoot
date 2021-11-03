@@ -198,9 +198,9 @@ function animate() {
           );
         }
 
-        for (let i = 0; i < 8; i++) {
+        for (let i = 0; i < 25; i++) {
           particles.push(  //push particles into the particle array when a projectile collides with an enemy. this produces explosion effect
-            new Particle(projectile.x, projectile.y, 3, enemy.color, {
+            new Particle(projectile.x, projectile.y, 4, enemy.color, {
               x: Math.random() - 0.5,
               y: Math.random() - 0.5,
             })
