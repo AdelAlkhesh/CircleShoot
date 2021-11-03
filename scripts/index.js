@@ -10,7 +10,10 @@ let audio = new Audio("./audio/Sub - Mini Impact-[AudioTrimmer.com] (1).wav");
 let backgroundAudio = new Audio("./audio/Sweet baby kicks PSG.mp3");
 
 let difficulty = 2;
-let isHit = false;
+
+let timer = 0;
+let speedID = 0;
+let cannonID = 0;
 
 letbackgroundColor = `hsl(${Math.random() * 360}, 50%, 50%)`;
 
@@ -24,6 +27,8 @@ const player = new Player(x, y, 15, "white");
 const projectiles = [];
 const enemies = [];
 const particles = [];
+const powerUps = [];
+const randomDrops = ["health", "speed"];
 
 function spawnEnemies() {
   setInterval(() => {
@@ -121,6 +126,9 @@ function animate() {
   drawDifficulty();
   increaseDifficulty();
   playerMovement();
+  powerUps.forEach((ele) => {
+    ele.update();
+  });
 
   projectiles.forEach((ele) => {
     ele.update();
@@ -137,6 +145,7 @@ function animate() {
     enemy.update();
     const dist = Math.hypot(player.x - enemy.x, player.y - enemy.y);
     if (dist - enemy.radius - player.radius < 1 && player.lives == 0) {
+      backgroundAudio.pause();
       cancelAnimationFrame(animationID);
     } else if (dist - enemy.radius - player.radius < 1 && player.lives > 0) {
       setTimeout(() => {
@@ -147,9 +156,18 @@ function animate() {
     projectiles.forEach((projectile, proIndex) => {
       const dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y);
       if (dist - enemy.radius - projectile.radius < 1 && enemy.health == 0) {
-        // audio.play();
-        // audio.volume = 0.1;
-        // audio.playbackRate = 1;
+        let chance = Math.round(Math.random() * 50);
+        if (chance == 1 && player.hasPowerUp == false) {
+          powerUps.push(
+            new RandomDrops(
+              projectile.x,
+              projectile.y,
+              15,
+              randomDrops[Math.floor(Math.random() * randomDrops.length)]
+            )
+          );
+        }
+
         for (let i = 0; i < 8; i++) {
           particles.push(
             new Particle(projectile.x, projectile.y, 3, enemy.color, {
@@ -204,7 +222,36 @@ function animate() {
       });
     }
   });
+
+  powerUps.forEach((drop, index) => {
+    let powerUpDist = Math.hypot(player.x - drop.x, player.y - drop.y);
+    if (
+      powerUpDist - drop.radius - player.radius < 1 &&
+      drop.name == "health"
+    ) {
+      player.lives += 1;
+      powerUps.splice(index, 1);
+    } else if (
+      powerUpDist - drop.radius - player.radius < 1 &&
+      drop.name == "speed"
+    ) {
+      player.hasPowerUp = true;
+      player.velocity = 5;
+      powerUps.splice(index, 1);
+      speedID = setInterval(() => {
+        timer++;
+        if (timer == 20) {
+          clearInterval(speedID);
+          player.velocity = 3;
+          timer = 0;
+          player.hasPowerUp = false;
+        }
+      }, 1000);
+    }
+  });
 }
+
+function speedUP() {}
 
 function shootProjectile() {
   const angle = Math.atan2(event.clientY - player.y, event.clientX - player.x);
@@ -217,11 +264,9 @@ function shootProjectile() {
 
 addEventListener("click", (event) => {
   shootProjectile();
-  console.log(projectiles);
   audio.currentTime = 0;
   audio.play();
   audio.volume = 0.1;
-
   audio.playbackRate = 1;
 });
 
