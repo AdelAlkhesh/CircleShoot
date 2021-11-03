@@ -6,7 +6,11 @@ let isRight = false;
 let isUp = false;
 let isDown = false;
 
+let audio = new Audio("./audio/Sub - Mini Impact-[AudioTrimmer.com] (1).wav");
+let backgroundAudio = new Audio("./audio/Sweet baby kicks PSG.mp3");
+
 let difficulty = 2;
+let isHit = false;
 
 letbackgroundColor = `hsl(${Math.random() * 360}, 50%, 50%)`;
 
@@ -105,6 +109,9 @@ function playerMovement() {
 }
 let animationID;
 function animate() {
+  backgroundAudio.play();
+  backgroundAudio.volume = 0.2;
+
   animationID = requestAnimationFrame(animate);
   ctx.fillStyle = "rgba(0,0,0,0.3";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -140,6 +147,9 @@ function animate() {
     projectiles.forEach((projectile, proIndex) => {
       const dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y);
       if (dist - enemy.radius - projectile.radius < 1 && enemy.health == 0) {
+        // audio.play();
+        // audio.volume = 0.1;
+        // audio.playbackRate = 1;
         for (let i = 0; i < 8; i++) {
           particles.push(
             new Particle(projectile.x, projectile.y, 3, enemy.color, {
@@ -157,7 +167,9 @@ function animate() {
         dist - enemy.radius - projectile.radius < 1 &&
         enemy.health > 0
       ) {
+        enemy.radius -= 20;
         enemy.health -= 1;
+        player.score += 20;
         projectiles.splice(proIndex, 1);
         for (let i = 0; i < 8; i++) {
           particles.push(
@@ -193,29 +205,24 @@ function animate() {
     }
   });
 }
-let mouse = false;
+
 function shootProjectile() {
-  if (mouse) {
-    const angle = Math.atan2(
-      event.clientY - player.y,
-      event.clientX - player.x
-    );
-    let velocity = {
-      x: Math.cos(angle) * 10,
-      y: Math.sin(angle) * 10,
-    };
-    projectiles.push(new Projectile(player.x, player.y, 5, "red", velocity));
-  }
+  const angle = Math.atan2(event.clientY - player.y, event.clientX - player.x);
+  let velocity = {
+    x: Math.cos(angle) * 10,
+    y: Math.sin(angle) * 10,
+  };
+  projectiles.push(new Projectile(player.x, player.y, 5, "red", velocity));
 }
 
-addEventListener("mousedown", (event) => {
-  mouse = true;
+addEventListener("click", (event) => {
   shootProjectile();
   console.log(projectiles);
-});
+  audio.currentTime = 0;
+  audio.play();
+  audio.volume = 0.1;
 
-addEventListener("mouseup", (event) => {
-  mouse = false;
+  audio.playbackRate = 1;
 });
 
 addEventListener("keydown", (event) => {
