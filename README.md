@@ -1,15 +1,15 @@
-# Gunz-Bunz-and-Zombie-Nunz
-A simple zombie horde shooting game 
+# Circle Shoot
+A simple shooter horde game 
 
 
-<a href=> Demo the game</a>
+<a href="https://adelalkhesh.github.io/CircleShoot/"> Demo the game</a>
 
 
 <h2> Description </h2> 
-The main game loop consists of the player running around the canvas, avoiding collision with the zombies that chase them. The player will also have to shoot the randomly spawning zombies to kill them and complete the level. 
+The main game loop consists of the player running around the canvas, avoiding collision with the circles that chase them. The player will also have to shoot the randomly spawning circles to kill them and gain score. 
 
 <h2>MVP</h2> 
-The mvp will be a game where the player can move in 4 different directions around the canvas while being followed by randomly spawning zombies (who will spawn from random coordinates). The player will be able to shoot projectiles at the zombies. the projectiles will shoot towards the mouse click coordinates at the time of the click. 
+The mvp will be a game where the player can move in 4 different directions around the canvas while being followed by randomly spawning circles (who will spawn from random coordinates). The player will be able to shoot projectiles at the circles. the projectiles will shoot towards the mouse click coordinates at the time of the click. 
 
 <h2>Backlog</h2> 
 The list of nice to have backlog features will include:<br> 
