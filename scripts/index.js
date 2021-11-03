@@ -30,9 +30,8 @@ const projectiles = [];
 const enemies = [];
 const particles = [];
 const powerUps = [];
-const randomDrops = ['cannon', 'speed', 'health'];
+const randomDrops = ["cannon", "speed", "health"];
 let powerUpDropped = false;
-
 
 function spawnEnemies() {
   setInterval(() => {
@@ -160,8 +159,12 @@ function animate() {
     projectiles.forEach((projectile, proIndex) => {
       const dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y);
       if (dist - enemy.radius - projectile.radius < 1 && enemy.health == 0) {
-        let chance = Math.round(Math.random() * 50);
-        if (chance == 1 && player.hasPowerUp == false && powerUpDropped == false) {
+        let chance = Math.round(Math.random() * 35);
+        if (
+          chance == 1 &&
+          player.hasPowerUp == false &&
+          powerUpDropped == false
+        ) {
           powerUpDropped = true;
           powerUps.push(
             new RandomDrops(
@@ -169,7 +172,6 @@ function animate() {
               projectile.y,
               15,
               randomDrops[Math.floor(Math.random() * randomDrops.length)]
-              
             )
           );
         }
@@ -237,12 +239,13 @@ function animate() {
     ) {
       player.lives += 1;
       powerUps.splice(index, 1);
+      powerUpDropped = false;
     } else if (
       powerUpDist - drop.radius - player.radius < 1 &&
       drop.name == "speed"
     ) {
       player.hasPowerUp = true;
-      player.velocity = 5;
+      player.velocity = 6;
       powerUps.splice(index, 1);
       speedID = setInterval(() => {
         timer++;
