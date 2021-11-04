@@ -1,8 +1,11 @@
 //----------------- DOM RELATED -------------------------
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
-const strtBtn = document.querySelector('.strtBtn')
-const strtScreen = document.querySelector(".startGame")
+const strtBtn = document.querySelector(".strtBtn");
+const strtScreen = document.querySelector(".startGame");
+const gameOverScreen = document.querySelector(".gameOver");
+const restartBtn = document.querySelector(".restartBtn");
+const endScore = document.querySelector(".score");
 canvas.height = innerHeight - 3;
 canvas.width = innerWidth;
 //-------------------------------------------------------
@@ -23,6 +26,7 @@ let isDown = false;
 let proRadius = 5;
 let difficulty = 2;
 let animationID;
+let isGameOver = false;
 // --------------------------------------------------------------
 
 //----------------------- Power Up variables---------------------
@@ -30,24 +34,25 @@ let timer = 0;
 let speedID = 0;
 let cannonID = 0;
 let powerUpDropped = false;
+let enemiesID = 0;
 //---------------------------------------------------------------
 
 // ------------------ Player Spawn and coordinates ------------------------
-const x = canvas.width / 2;
-const y = canvas.height / 2;
-const player = new Player(x, y, 15, "white");
+let x = canvas.width / 2;
+let y = canvas.height / 2;
+let player = new Player(x, y, 15, "white");
 //-------------------------------------------------------------------------
 
 //------------------------ Arrays for spawning game objects ---------------------
-const projectiles = [];
-const enemies = [];
-const particles = [];
-const powerUps = [];
-const randomDrops = ["cannon", "speed", "health"];
+let projectiles = [];
+let enemies = [];
+let particles = [];
+let powerUps = [];
+let randomDrops = ["cannon", "speed", "health"];
 //---------------------------------------------------------------------------------
 
 function spawnEnemies() {
-  setInterval(() => {
+  enemiesID = setInterval(() => {
     let health = 0;
     let radius = Math.floor(Math.random() * 40); //create a random radius between 1 and 40
     if (radius < 10) {
@@ -135,7 +140,7 @@ function playerMovement() {
 
 function animate() {
   backgroundAudio.play();
-  backgroundAudio.volume = 0.2;
+  backgroundAudio.volume = 0.1;
   //---------------------------------
   animationID = requestAnimationFrame(animate);
   //--------------- blur effect ------------
@@ -170,9 +175,8 @@ function animate() {
     enemy.update();
     const dist = Math.hypot(player.x - enemy.x, player.y - enemy.y); //calculate distance by substracting enemy position from player position (x, y)
     if (dist - enemy.radius - player.radius < 1 && player.lives == 0) {
-      //collision check, if player has 0 health, freeze animation
-      backgroundAudio.pause();
-      cancelAnimationFrame(animationID);
+      //collision check, if player has 0 health, freeze animation and end the game
+      gameOver();
     } else if (dist - enemy.radius - player.radius < 1 && player.lives > 0) {
       //if player has health > 0, destroy enemy and remove 1 health from player
       setTimeout(() => {
@@ -328,30 +332,48 @@ function shootProjectile() {
   );
 }
 
-
 function startGame() {
   strtBtn.style.display = "none";
+  strtScreen.style.display = "none";
+  gameOverScreen.style.display = "none";
   canvas.style.display = "block";
   animate();
   spawnEnemies();
   increaseDifficulty();
 }
 
+function gameOver() {
+  cancelAnimationFrame(animationID);
+  clearInterval(enemiesID)
+  backgroundAudio.pause();
+  canvas.style.display = "none";
+  gameOverScreen.style.display = "block";
+  endScore.innerText = `${player.score}`;
+  projectiles = [];
+  enemies = [];
+  particles = [];
+  powerUps = [];
+  x = canvas.width / 2;
+  y = canvas.height / 2;
+  player = new Player(x, y, 15, "white");
+}
 
 window.addEventListener("load", () => {
-  canvas.style.display = 'none';
- 
+  canvas.style.display = "none";
+  gameOverScreen.style.display = "none";
 
-
-  strtBtn.addEventListener('click', () => {
-    strtScreen.style.display = 'none';
+  restartBtn.addEventListener("click", () => {
+    gameOverScreen.style.display = "none";
     startGame();
-    
-  })
+  });
+
+  strtBtn.addEventListener("click", () => {
+    startGame();
+  });
 
   addEventListener("click", (event) => {
     shootProjectile();
-    canvas.style.display = 'block'
+    canvas.style.display = "block";
     audio.currentTime = 0;
     audio.play();
     audio.volume = 0.1;
@@ -388,10 +410,3 @@ window.addEventListener("load", () => {
     }
   });
 });
-
-
-  // animate();
-  // spawnEnemies();
-  // increaseDifficulty();
-
-

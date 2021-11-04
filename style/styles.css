@@ -37,3 +37,18 @@ button {
     font-size: 20px;
 }
 
+
+
+.gameOver {
+    margin-top: 150px;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+}
+
+.score {
+    color: white;
+}
