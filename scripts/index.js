@@ -190,7 +190,7 @@ function animate() {
         let chance = Math.round(Math.random() * 35); //create a random number generator on enemy death
         if (
           // drop a powerup
-          chance == 1 &&
+          chance > 1 &&
           player.hasPowerUp == false &&
           powerUpDropped == false
         ) {
