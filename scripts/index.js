@@ -82,19 +82,19 @@ function spawnEnemies() {
 
 function drawScore() {
   ctx.fillStyle = "white";
-  ctx.font = "30px Ariel";
+  ctx.font = "20px Montserrat";
   ctx.fillText(`Score: ${player.score}`, 10, 30);
 }
 
 function drawLives() {
   ctx.fillStyle = "white";
-  ctx.font = "30px Ariel";
+  ctx.font = "20px Montserrat";
   ctx.fillText(`Lives : ${player.lives}`, 10, 70);
 }
 
 function drawDifficulty() {
   ctx.fillStyle = "white";
-  ctx.font = "30px Ariel";
+  ctx.font = "20px Montserrat";
   ctx.fillText(`Difficulty : ${difficulty}`, 10, 110);
 }
 
