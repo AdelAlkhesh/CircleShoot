@@ -374,7 +374,6 @@ window.addEventListener("load", () => {
 
   addEventListener("click", (event) => {
     shootProjectile();
-    canvas.style.display = "block";
     audio.currentTime = 0;
     audio.play();
     audio.volume = 0.1;
