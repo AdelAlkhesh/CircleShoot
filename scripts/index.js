@@ -344,7 +344,7 @@ function startGame() {
 
 function gameOver() {
   cancelAnimationFrame(animationID);
-  clearInterval(enemiesID)
+  clearInterval(enemiesID);
   backgroundAudio.pause();
   canvas.style.display = "none";
   gameOverScreen.style.display = "block";
