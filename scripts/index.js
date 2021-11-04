@@ -356,6 +356,7 @@ function gameOver() {
   x = canvas.width / 2;
   y = canvas.height / 2;
   player = new Player(x, y, 15, "white");
+  difficulty = 2;
 }
 
 window.addEventListener("load", () => {
