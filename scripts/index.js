@@ -1,7 +1,9 @@
 //----------------- DOM RELATED -------------------------
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
-canvas.height = innerHeight;
+const strtBtn = document.querySelector('.strtBtn')
+const strtScreen = document.querySelector(".startGame")
+canvas.height = innerHeight - 3;
 canvas.width = innerWidth;
 //-------------------------------------------------------
 
@@ -30,13 +32,11 @@ let cannonID = 0;
 let powerUpDropped = false;
 //---------------------------------------------------------------
 
-
-// ------------------ Player Spawn and coordinates ------------------------ 
+// ------------------ Player Spawn and coordinates ------------------------
 const x = canvas.width / 2;
 const y = canvas.height / 2;
 const player = new Player(x, y, 15, "white");
 //-------------------------------------------------------------------------
-
 
 //------------------------ Arrays for spawning game objects ---------------------
 const projectiles = [];
@@ -54,28 +54,29 @@ function spawnEnemies() {
       radius += 10;
     }
     if (radius > 30) {
-      health = 1;    //if enemy radius is greater than 30, it has 2 points of health
+      health = 1; //if enemy radius is greater than 30, it has 2 points of health
     }
 
     //enemy x and y coordinates
     let x;
     let y;
     if (Math.random() < 0.5) {
-      x = Math.random() < 0.5 ? 0 - radius : canvas.width + radius; 
+      x = Math.random() < 0.5 ? 0 - radius : canvas.width + radius;
       y = Math.random() * canvas.height;
     } else {
       y = Math.random() < 0.5 ? 0 - radius : canvas.height + radius;
       x = Math.random() * canvas.width;
     }
     let color1 = Math.random() * 360;
-    const color = `hsl(${color1}, 50%, 50%`;  // randomized color 
-    const angle = Math.atan2(player.y - y, player.x - x);  //calculate angle based on player position - enemy spawn position
-    let velocity = {  // use the angle to determine the direction and velocity of the enemy (to move towards the player)
+    const color = `hsl(${color1}, 50%, 50%`; // randomized color
+    const angle = Math.atan2(player.y - y, player.x - x); //calculate angle based on player position - enemy spawn position
+    let velocity = {
+      // use the angle to determine the direction and velocity of the enemy (to move towards the player)
       x: Math.cos(angle) * difficulty,
       y: Math.sin(angle) * difficulty,
     };
 
-    enemies.push(new Enemy(x, y, radius, color, velocity, health));  // create a new enemy object based on the above variables ( it will spawn every 1 second from a random spot outside the canvas boundries and move in)
+    enemies.push(new Enemy(x, y, radius, color, velocity, health)); // create a new enemy object based on the above variables ( it will spawn every 1 second from a random spot outside the canvas boundries and move in)
   }, 600);
 }
 
@@ -130,13 +131,12 @@ function playerMovement() {
   }
 }
 
-
 //--------------------------------- MAIN GAME LOOP AND ANIMATION ----------------------------------------------------------
 
 function animate() {
   backgroundAudio.play();
   backgroundAudio.volume = 0.2;
-//---------------------------------
+  //---------------------------------
   animationID = requestAnimationFrame(animate);
   //--------------- blur effect ------------
   ctx.fillStyle = "rgba(0,0,0,0.3";
@@ -149,8 +149,8 @@ function animate() {
   drawDifficulty();
   increaseDifficulty();
   playerMovement();
-//------------------------------------------------------
-  
+  //------------------------------------------------------
+
   powerUps.forEach((ele) => {
     ele.update();
   });
@@ -169,10 +169,12 @@ function animate() {
   enemies.forEach((enemy, index) => {
     enemy.update();
     const dist = Math.hypot(player.x - enemy.x, player.y - enemy.y); //calculate distance by substracting enemy position from player position (x, y)
-    if (dist - enemy.radius - player.radius < 1 && player.lives == 0) {  //collision check, if player has 0 health, freeze animation
+    if (dist - enemy.radius - player.radius < 1 && player.lives == 0) {
+      //collision check, if player has 0 health, freeze animation
       backgroundAudio.pause();
       cancelAnimationFrame(animationID);
-    } else if (dist - enemy.radius - player.radius < 1 && player.lives > 0) { //if player has health > 0, destroy enemy and remove 1 health from player
+    } else if (dist - enemy.radius - player.radius < 1 && player.lives > 0) {
+      //if player has health > 0, destroy enemy and remove 1 health from player
       setTimeout(() => {
         player.lives -= 1;
         enemies.splice(index, 1);
@@ -182,7 +184,8 @@ function animate() {
       const dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y); //same distance calculation as above, but this one is for projectiles and enemies
       if (dist - enemy.radius - projectile.radius < 1 && enemy.health == 0) {
         let chance = Math.round(Math.random() * 35); //create a random number generator on enemy death
-        if ( // drop a powerup 
+        if (
+          // drop a powerup
           chance == 1 &&
           player.hasPowerUp == false &&
           powerUpDropped == false
@@ -193,17 +196,24 @@ function animate() {
               projectile.x,
               projectile.y,
               15,
-              randomDrops[Math.floor(Math.random() * randomDrops.length)] //push random powerup into the powerup array 
+              randomDrops[Math.floor(Math.random() * randomDrops.length)] //push random powerup into the powerup array
             )
           );
         }
 
         for (let i = 0; i < 25; i++) {
-          particles.push(  //push particles into the particle array when a projectile collides with an enemy. this produces explosion effect
-            new Particle(projectile.x, projectile.y, 4, enemy.color, {
-              x: Math.random() - 0.5,
-              y: Math.random() - 0.5,
-            })
+          particles.push(
+            //push particles into the particle array when a projectile collides with an enemy. this produces explosion effect
+            new Particle(
+              projectile.x,
+              projectile.y,
+              Math.random() * 4,
+              enemy.color,
+              {
+                x: (Math.random() - 0.5) * (Math.random() * 6),
+                y: (Math.random() - 0.5) * (Math.random() * 6),
+              }
+            )
           );
         }
         setTimeout(() => {
@@ -230,7 +240,8 @@ function animate() {
       }
     });
   });
-  projectiles.forEach((ele, proIndex) => { // destroy projectiles when they leave screen boundries by looping through the projectile array and checking each projectile position 
+  projectiles.forEach((ele, proIndex) => {
+    // destroy projectiles when they leave screen boundries by looping through the projectile array and checking each projectile position
     if (ele.x + ele.radius > canvas.width) {
       setTimeout(() => {
         projectiles.splice(proIndex, 1);
@@ -253,19 +264,22 @@ function animate() {
     }
   });
 
-  powerUps.forEach((drop, index) => { //check if player collides with powerup by looping through powerup array and checking position relative to player position
+  powerUps.forEach((drop, index) => {
+    //check if player collides with powerup by looping through powerup array and checking position relative to player position
     let powerUpDist = Math.hypot(player.x - drop.x, player.y - drop.y);
     if (
       powerUpDist - drop.radius - player.radius < 1 &&
       drop.name == "health"
-    ) { //the health drop adds one health to the player
+    ) {
+      //the health drop adds one health to the player
       player.lives += 1;
       powerUps.splice(index, 1);
       powerUpDropped = false;
     } else if (
       powerUpDist - drop.radius - player.radius < 1 &&
       drop.name == "speed"
-    ) { //the speed drop sets the move speed to 6 for 20 seconds
+    ) {
+      //the speed drop sets the move speed to 6 for 20 seconds
       player.hasPowerUp = true;
       player.velocity = 6;
       powerUps.splice(index, 1);
@@ -279,7 +293,8 @@ function animate() {
           powerUpDropped = false;
         }
       }, 1000);
-    } else if ( //the cannon drop increases projectile radius to 20 for 20 seconds
+    } else if (
+      //the cannon drop increases projectile radius to 20 for 20 seconds
       powerUpDist - drop.radius - player.radius < 1 &&
       drop.name == "cannon"
     ) {
@@ -301,7 +316,8 @@ function animate() {
 }
 //-------------------------------------------------------------------------------------------------------------------------
 
-function shootProjectile() { //same calculations for enemy movement to follow player. but for projectiles they move towards the mouse click coordinates (clientY, clientX )
+function shootProjectile() {
+  //same calculations for enemy movement to follow player. but for projectiles they move towards the mouse click coordinates (clientY, clientX )
   const angle = Math.atan2(event.clientY - player.y, event.clientX - player.x);
   let velocity = {
     x: Math.cos(angle) * 10,
@@ -312,46 +328,70 @@ function shootProjectile() { //same calculations for enemy movement to follow pl
   );
 }
 
-addEventListener("click", (event) => {
-  shootProjectile();
-  audio.currentTime = 0;
-  audio.play();
-  audio.volume = 0.1;
-  audio.playbackRate = 1;
+
+function startGame() {
+  strtBtn.style.display = "none";
+  canvas.style.display = "block";
+  animate();
+  spawnEnemies();
+  increaseDifficulty();
+}
+
+
+window.addEventListener("load", () => {
+  canvas.style.display = 'none';
+ 
+
+
+  strtBtn.addEventListener('click', () => {
+    strtScreen.style.display = 'none';
+    startGame();
+    
+  })
+
+  addEventListener("click", (event) => {
+    shootProjectile();
+    canvas.style.display = 'block'
+    audio.currentTime = 0;
+    audio.play();
+    audio.volume = 0.1;
+    audio.playbackRate = 1;
+  });
+
+  addEventListener("keydown", (event) => {
+    if (event.key == "a") {
+      isLeft = true;
+    }
+    if (event.key == "d") {
+      isRight = true;
+    }
+    if (event.key == "w") {
+      isUp = true;
+    }
+    if (event.key == "s") {
+      isDown = true;
+    }
+  });
+
+  addEventListener("keyup", (event) => {
+    if (event.key == "a") {
+      isLeft = false;
+    }
+    if (event.key == "d") {
+      isRight = false;
+    }
+    if (event.key == "w") {
+      isUp = false;
+    }
+    if (event.key == "s") {
+      isDown = false;
+    }
+  });
 });
 
-addEventListener("keydown", (event) => {
-  if (event.key == "a") {
-    isLeft = true;
-  }
-  if (event.key == "d") {
-    isRight = true;
-  }
-  if (event.key == "w") {
-    isUp = true;
-  }
-  if (event.key == "s") {
-    isDown = true;
-  }
-});
 
-addEventListener("keyup", (event) => {
-  if (event.key == "a") {
-    isLeft = false;
-  }
-  if (event.key == "d") {
-    isRight = false;
-  }
-  if (event.key == "w") {
-    isUp = false;
-  }
-  if (event.key == "s") {
-    isDown = false;
-  }
-});
+  // animate();
+  // spawnEnemies();
+  // increaseDifficulty();
 
 
-
-animate();
-spawnEnemies();
-increaseDifficulty();
