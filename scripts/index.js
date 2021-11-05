@@ -426,31 +426,31 @@ window.addEventListener("load", () => {
   });
 
   addEventListener("keydown", (event) => {
-    if (event.key == "a") {
+    if (event.key == "a" || event.key == 'ArrowLeft') {
       isLeft = true;
     }
-    if (event.key == "d") {
+    if (event.key == "d" || event.key == 'ArrowRight') {
       isRight = true;
     }
-    if (event.key == "w") {
+    if (event.key == "w" || event.key == 'ArrowUp') {
       isUp = true;
     }
-    if (event.key == "s") {
+    if (event.key == "s" || event.key == 'ArrowDown') {
       isDown = true;
     }
   });
 
   addEventListener("keyup", (event) => {
-    if (event.key == "a") {
+    if (event.key == "a" || event.key == "ArrowLeft") {
       isLeft = false;
     }
-    if (event.key == "d") {
+    if (event.key == "d" || event.key == "ArrowRight") {
       isRight = false;
     }
-    if (event.key == "w") {
+    if (event.key == "w" || event.key == "ArrowUp") {
       isUp = false;
     }
-    if (event.key == "s") {
+    if (event.key == "s" || event.key == "ArrowDown") {
       isDown = false;
     }
   });
