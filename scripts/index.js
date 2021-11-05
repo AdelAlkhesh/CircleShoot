@@ -31,6 +31,7 @@ let isGameOver = false;
 
 //----------------------- Power Up variables---------------------
 let timer = 0;
+timer2 = 0;
 let speedID = 0;
 let cannonID = 0;
 let healthID = 0;
@@ -50,7 +51,7 @@ let projectiles = [];
 let enemies = [];
 let particles = [];
 let powerUps = [];
-let randomDrops = ["health"];
+let randomDrops = ["health", 'speed', 'cannon'];
 //---------------------------------------------------------------------------------
 
 function spawnEnemies() {
@@ -186,11 +187,11 @@ function animate() {
         enemies.splice(index, 1);
         player.color = "red";
         damageID = setInterval(() => {
-          timer++;
-          if (timer == 4) {
+          timer2++;
+          if (timer2 == 4) {
             clearInterval(damageID);
             player.color = "white";
-            timer = 0;
+            timer2 = 0;
           }
         }, 100);
       }, 0);
@@ -368,6 +369,8 @@ function gameOver() {
   clearInterval(enemiesID);
   clearInterval(cannonID);
   clearInterval(speedID);
+  clearInterval(healthID);
+  clearInterval(damageID);
   backgroundAudio.pause();
   canvas.style.display = "none";
   gameOverScreen.style.display = "block";
@@ -382,6 +385,7 @@ function gameOver() {
   difficulty = 2;
   proRadius = 5;
   timer = 0;
+  timer2 = 0;
 }
 
 window.addEventListener("load", () => {
