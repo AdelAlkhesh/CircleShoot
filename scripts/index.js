@@ -236,8 +236,8 @@ function animate() {
         for (let i = 0; i < 8; i++) {
           particles.push(
             new Particle(projectile.x, projectile.y, 3, enemy.color, {
-              x: Math.random() - 0.5,
-              y: Math.random() - 0.5,
+              x: (Math.random() - 0.5) * (Math.random() * 6),
+              y: (Math.random() - 0.5) * (Math.random() * 6),
             })
           );
         }
@@ -360,6 +360,7 @@ function gameOver() {
   player = new Player(x, y, 15, "white");
   difficulty = 2;
   proRadius = 5;
+  timer = 0;
 }
 
 window.addEventListener("load", () => {
