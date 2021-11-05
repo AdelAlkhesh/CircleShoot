@@ -345,6 +345,8 @@ function startGame() {
 function gameOver() {
   cancelAnimationFrame(animationID);
   clearInterval(enemiesID);
+  clearInterval(cannonID);
+  clearInterval(speedID);
   backgroundAudio.pause();
   canvas.style.display = "none";
   gameOverScreen.style.display = "block";
@@ -357,6 +359,7 @@ function gameOver() {
   y = canvas.height / 2;
   player = new Player(x, y, 15, "white");
   difficulty = 2;
+  proRadius = 5;
 }
 
 window.addEventListener("load", () => {
