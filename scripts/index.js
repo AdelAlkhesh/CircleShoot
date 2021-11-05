@@ -188,7 +188,7 @@ function animate() {
         player.color = "red";
         damageID = setInterval(() => {
           timer2++;
-          if (timer2 == 4) {
+          if (timer2 == 3) {
             clearInterval(damageID);
             player.color = "white";
             timer2 = 0;
