@@ -6,6 +6,8 @@ const strtScreen = document.querySelector(".startGame");
 const gameOverScreen = document.querySelector(".gameOver");
 const restartBtn = document.querySelector(".restartBtn");
 const endScore = document.querySelector(".score");
+const pauseScreen = document.querySelector(".pause");
+const pauseScore = document.querySelector(".pauseScore");
 canvas.height = innerHeight - 3;
 canvas.width = innerWidth;
 //-------------------------------------------------------
@@ -27,6 +29,7 @@ let proRadius = 5;
 let difficulty = 2;
 let animationID;
 let isGameOver = false;
+let isRunning = true;
 // --------------------------------------------------------------
 
 //----------------------- Power Up variables---------------------
@@ -51,7 +54,7 @@ let projectiles = [];
 let enemies = [];
 let particles = [];
 let powerUps = [];
-let randomDrops = ["health", 'speed', 'cannon'];
+let randomDrops = ["health", "speed", "cannon"];
 //---------------------------------------------------------------------------------
 
 function spawnEnemies() {
@@ -359,6 +362,7 @@ function startGame() {
   strtScreen.style.display = "none";
   gameOverScreen.style.display = "none";
   canvas.style.display = "block";
+  pauseScreen.style.display = "none";
   animate();
   spawnEnemies();
   increaseDifficulty();
@@ -372,6 +376,7 @@ function gameOver() {
   clearInterval(healthID);
   clearInterval(damageID);
   backgroundAudio.pause();
+  backgroundAudio.currentTime = 0;
   canvas.style.display = "none";
   gameOverScreen.style.display = "block";
   endScore.innerText = `${player.score}`;
@@ -388,9 +393,20 @@ function gameOver() {
   timer2 = 0;
 }
 
+function pause() {
+  isRunning = !isRunning;
+  if (isRunning) {
+    animate();
+  } else {
+    cancelAnimationFrame(animationID);
+    clearInterval(enemiesID);
+  }
+}
+
 window.addEventListener("load", () => {
   canvas.style.display = "none";
   gameOverScreen.style.display = "none";
+  pauseScreen.style.display = "none";
 
   restartBtn.addEventListener("click", () => {
     gameOverScreen.style.display = "none";
@@ -436,6 +452,29 @@ window.addEventListener("load", () => {
     }
     if (event.key == "s") {
       isDown = false;
+    }
+  });
+
+  addEventListener("keypress", (event) => {
+    if (event.key === "x") {
+      if (isRunning) {
+        pause();
+        backgroundAudio.pause();
+        canvas.style.display = "none";
+        pauseScreen.style.display = "block";
+        pauseScore.innerText = `${player.score}`;
+      }
+    }
+  });
+  addEventListener("keypress", (event) => {
+    if (event.key === "z") {
+      if (!isRunning) {
+        pause();
+        backgroundAudio.pause();
+        canvas.style.display = "block";
+        pauseScreen.style.display = "none";
+        spawnEnemies();
+      }
     }
   });
 });
