@@ -33,6 +33,8 @@ let isGameOver = false;
 let timer = 0;
 let speedID = 0;
 let cannonID = 0;
+let healthID = 0;
+let damageID = 0;
 let powerUpDropped = false;
 let enemiesID = 0;
 //---------------------------------------------------------------
@@ -48,7 +50,7 @@ let projectiles = [];
 let enemies = [];
 let particles = [];
 let powerUps = [];
-let randomDrops = ["cannon", "speed", "health"];
+let randomDrops = ["health"];
 //---------------------------------------------------------------------------------
 
 function spawnEnemies() {
@@ -182,6 +184,15 @@ function animate() {
       setTimeout(() => {
         player.lives -= 1;
         enemies.splice(index, 1);
+        player.color = "red";
+        damageID = setInterval(() => {
+          timer++;
+          if (timer == 4) {
+            clearInterval(damageID);
+            player.color = "white";
+            timer = 0;
+          }
+        }, 100);
       }, 0);
     }
     projectiles.forEach((projectile, proIndex) => {
@@ -277,8 +288,18 @@ function animate() {
     ) {
       //the health drop adds one health to the player
       player.lives += 1;
+      player.color = "green";
       powerUps.splice(index, 1);
-      powerUpDropped = false;
+      healthID = setInterval(() => {
+        timer++;
+        if (timer == 3) {
+          clearInterval(healthID);
+          player.color = "white";
+          timer = 0;
+          player.hasPowerUp = false;
+          powerUpDropped = false;
+        }
+      }, 100);
     } else if (
       powerUpDist - drop.radius - player.radius < 1 &&
       drop.name == "speed"
