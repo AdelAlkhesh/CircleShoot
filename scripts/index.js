@@ -391,6 +391,8 @@ function gameOver() {
   proRadius = 5;
   timer = 0;
   timer2 = 0;
+  powerUpDropped = false;
+  hasPowerUp = false;
 }
 
 function pause() {
